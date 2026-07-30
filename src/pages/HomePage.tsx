@@ -13,6 +13,7 @@ import { OptimizedImage } from "@/components/OptimizedImage"
 import { events } from "@/data/events"
 import { episodes } from "@/data/episodes"
 import {
+  ARTICLES_URL,
   BEGINNERS_URL,
   CITIES_URL,
   COMMUNITY_URL,
@@ -25,27 +26,35 @@ import { usePageMeta } from "@/lib/usePageMeta"
 const paths = [
   {
     number: "01",
-    title: "Upoznaj Bitcoin",
-    text: "Mirni početak bez žargona, hypea i nepotrebnog rizika.",
-    href: BEGINNERS_URL,
+    title: "Čitaj materijale",
+    text: "Vodiči, članci i objašnjenja za mirno učenje bez žargona.",
+    href: ARTICLES_URL,
     tone: "bg-[#d7f4e8]",
-    image: "/images/landing/stock image btc 3.jpeg",
+    image: "/images/landing/stock image btc 7.jpeg",
   },
   {
     number: "02",
-    title: "Gledaj uživo",
+    title: "Gledaj live podcaste",
     text: "Razgovori, pitanja i lokalna perspektiva — svake nedjelje.",
     href: LIVESTREAM_URL,
     tone: "bg-[#dce9ff]",
-    image: "/images/landing/stock image btc 6.jpeg",
+    image: "/images/landing/stock image btc 3.jpeg",
   },
   {
     number: "03",
-    title: "Pokreni nešto lokalno",
-    text: "Predloži događaj, pronađi ljude ili započni dobru inicijativu.",
+    title: "Pridruži se Telegramu",
+    text: "Postavi pitanje, pronađi ljude i uključi se u razgovor iz regije.",
     href: COMMUNITY_URL,
     tone: "bg-[#ffd9c1]",
     external: true,
+    image: "/images/landing/stock image btc 6.jpeg",
+  },
+  {
+    number: "04",
+    title: "Dođi na meetup",
+    text: "Upoznaj zajednicu uživo na sljedećem lokalnom okupljanju.",
+    href: EVENTS_URL,
+    tone: "bg-[#ffe7a8]",
     image: "/images/landing/stock image btc 8.jpeg",
   },
 ]
@@ -163,11 +172,11 @@ export function HomePage() {
         <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24">
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-strong">Tvoj sljedeći korak</p>
-              <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">Uđi kroz vrata koja ti najviše odgovaraju.</h2>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-strong">Počni ovdje</p>
+              <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">Odaberi svoj prvi korak u Bitcoinu.</h2>
             </div>
           </div>
-          <div className="mt-9 grid gap-4 md:grid-cols-3">
+          <div className="mt-9 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {paths.map((path) => (
               <a
                 className={`group relative min-h-72 overflow-hidden rounded-[1.75rem] p-6 transition-transform duration-200 hover:-translate-y-1 ${path.tone}`}
