@@ -297,6 +297,17 @@ export function HomePage() {
           </div>
         </section>
 
+        <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-8 sm:pb-24">
+          <div className="flex flex-col gap-6 rounded-[1.75rem] border border-border/80 bg-secondary/55 px-6 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-10">
+            <div className="max-w-2xl">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-primary-strong"><MessageCircle className="size-4" /> Razgovor se nastavlja</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">Pridruži se na Telegramu.</h2>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">Postavi pitanje, prati najave i upoznaj ljude iz cijele regije. Početnici su uvijek dobrodošli.</p>
+            </div>
+            <ActionButton href={COMMUNITY_URL} icon={<ArrowUpRight className="size-4" />} primary external>Pridruži se na Telegramu</ActionButton>
+          </div>
+        </section>
+
         <section className="bg-[#242022] py-16 text-[#fff8ef] sm:py-24">
           <div className="mx-auto grid max-w-7xl gap-9 px-5 sm:px-8 lg:grid-cols-[0.78fr_1.22fr] lg:items-end">
             <div>
