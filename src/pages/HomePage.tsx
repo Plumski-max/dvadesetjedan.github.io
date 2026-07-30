@@ -109,6 +109,15 @@ export function HomePage() {
                 height={1176}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#242022] via-[#242022]/80 to-[#242022]/20" />
+              <OptimizedImage
+                alt=""
+                aria-hidden="true"
+                className="absolute -right-24 bottom-28 w-[34rem] max-w-none opacity-25 [mask-image:linear-gradient(90deg,transparent,black_22%,black_72%,transparent)] sm:-right-16"
+                pictureClassName="pointer-events-none absolute"
+                src="/images/dvadesetjedan-logo-dark.png"
+                width={840}
+                height={72}
+              />
               <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-[#ffd35f]">
                 Zajednica je uživo
               </p>
