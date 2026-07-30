@@ -12,15 +12,23 @@ import { Layout } from "@/components/Layout"
 import { OptimizedImage } from "@/components/OptimizedImage"
 import { events } from "@/data/events"
 import { episodes } from "@/data/episodes"
+import { publishedCommunityProjects } from "@/data/communityProjects"
 import {
   ARTICLES_URL,
   BEGINNERS_URL,
   CITIES_URL,
   COMMUNITY_URL,
+  COMMUNITY_PROJECTS_URL,
   EVENTS_URL,
   LIVESTREAM_URL,
 } from "@/data/site"
-import { episodeHref, eventHref, formatEpisodeDate, formatEventDate } from "@/lib/content"
+import {
+  communityProjectHref,
+  episodeHref,
+  eventHref,
+  formatEpisodeDate,
+  formatEventDate,
+} from "@/lib/content"
 import { usePageMeta } from "@/lib/usePageMeta"
 
 const paths = [
@@ -59,6 +67,13 @@ const paths = [
   },
 ]
 
+const communityPhotos = [
+  "/images/events/bridging bitcoin belgrade october 202441.34.jpeg",
+  "/images/events/revolution rocks belgrade june 2026 9.jpeg",
+  "/images/events/kraljevica meetup 2024.jpeg",
+  "/images/events/rab meetup 2022.jpeg",
+]
+
 export function HomePage() {
   usePageMeta(
     "DvadesetJedan | Bitcoin zajednica za Balkan",
@@ -72,6 +87,9 @@ export function HomePage() {
         new Date(left.start).getTime() - new Date(right.start).getTime(),
     )[0]
   const latestEpisode = episodes[0]
+  const memberProjects = publishedCommunityProjects
+    .filter((project) => project.featured && project.status !== "archive")
+    .slice(0, 3)
 
   return (
     <Layout>
@@ -204,6 +222,42 @@ export function HomePage() {
                 </div>
               </a>
             ))}
+          </div>
+        </section>
+
+        <section className="border-y border-foreground/10 bg-card/60 py-16 sm:py-24">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-strong">Zajednica u pokretu</p>
+              <h2 className="mt-3 text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">Fotografije s prošlih događaja.</h2>
+            </div>
+            <div className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {communityPhotos.map((photo, index) => (
+                <div className={`overflow-hidden rounded-[1.5rem] ${index % 2 === 0 ? "sm:translate-y-8" : ""}`} key={photo}>
+                  <OptimizedImage alt="DvadesetJedan zajednica na događaju" className="aspect-[4/5] w-full object-cover" pictureClassName="block" src={photo} width={1170} height={1176} />
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-20 flex flex-wrap items-end justify-between gap-5">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-strong">Iz zajednice</p>
+                <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">Što rade naši članovi.</h2>
+              </div>
+              <a className="inline-flex items-center gap-2 text-sm font-semibold text-primary-strong hover:text-foreground" href={COMMUNITY_PROJECTS_URL}>
+                Svi projekti <ArrowUpRight className="size-4" />
+              </a>
+            </div>
+            <div className="mt-9 grid gap-4 md:grid-cols-3">
+              {memberProjects.map((project) => (
+                <a className="group rounded-[1.5rem] border border-border/80 bg-background p-6 transition-transform hover:-translate-y-1" href={communityProjectHref(project.slug)} key={project.slug}>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-strong">{project.displayName}</p>
+                  <h3 className="mt-4 text-2xl font-semibold tracking-[-0.04em]">{project.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-muted-foreground">{project.summary}</p>
+                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">Pogledaj projekt <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-1" /></span>
+                </a>
+              ))}
+            </div>
           </div>
         </section>
 
