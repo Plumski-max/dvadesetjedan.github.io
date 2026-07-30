@@ -29,6 +29,7 @@ const paths = [
     text: "Mirni početak bez žargona, hypea i nepotrebnog rizika.",
     href: BEGINNERS_URL,
     tone: "bg-[#d7f4e8]",
+    image: "/images/landing/stock image btc 3.jpeg",
   },
   {
     number: "02",
@@ -36,6 +37,7 @@ const paths = [
     text: "Razgovori, pitanja i lokalna perspektiva — svake nedjelje.",
     href: LIVESTREAM_URL,
     tone: "bg-[#dce9ff]",
+    image: "/images/landing/stock image btc 6.jpeg",
   },
   {
     number: "03",
@@ -44,6 +46,7 @@ const paths = [
     href: COMMUNITY_URL,
     tone: "bg-[#ffd9c1]",
     external: true,
+    image: "/images/landing/stock image btc 8.jpeg",
   },
 ]
 
@@ -96,11 +99,20 @@ export function HomePage() {
               </div>
             </div>
 
-            <div className="relative overflow-hidden rounded-[2rem] bg-[#242022] p-5 text-[#fff8ef] shadow-[0_28px_70px_rgba(42,30,18,0.2)] sm:p-7">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#ffd35f]">
+            <div className="relative min-h-[29rem] overflow-hidden rounded-[2rem] bg-[#242022] p-5 text-[#fff8ef] shadow-[0_28px_70px_rgba(42,30,18,0.2)] sm:p-7">
+              <OptimizedImage
+                alt="Bitcoin detalj"
+                className="absolute inset-0 h-full w-full object-cover opacity-70"
+                pictureClassName="absolute inset-0 block h-full w-full"
+                src="/images/landing/stock image btc 2.jpeg"
+                width={1170}
+                height={1176}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#242022] via-[#242022]/80 to-[#242022]/20" />
+              <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-[#ffd35f]">
                 Zajednica je uživo
               </p>
-              <div className="mt-12 max-w-sm">
+              <div className="relative mt-12 max-w-sm">
                 <p className="text-3xl font-semibold leading-tight tracking-[-0.05em] sm:text-4xl">
                   Ideje postaju jače kad ih podijelimo za istim stolom.
                 </p>
@@ -149,14 +161,23 @@ export function HomePage() {
           <div className="mt-9 grid gap-4 md:grid-cols-3">
             {paths.map((path) => (
               <a
-                className={`group min-h-64 rounded-[1.75rem] p-6 transition-transform duration-200 hover:-translate-y-1 ${path.tone}`}
+                className={`group relative min-h-72 overflow-hidden rounded-[1.75rem] p-6 transition-transform duration-200 hover:-translate-y-1 ${path.tone}`}
                 href={path.href}
                 key={path.number}
                 rel={path.external ? "noopener noreferrer" : undefined}
                 target={path.external ? "_blank" : undefined}
               >
-                <p className="text-sm font-semibold text-foreground/55">{path.number}</p>
-                <div className="mt-16 flex items-end justify-between gap-3">
+                <OptimizedImage
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover opacity-35 transition-transform duration-500 group-hover:scale-105"
+                  pictureClassName="absolute inset-0 block h-full w-full"
+                  src={path.image}
+                  width={1170}
+                  height={1176}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-white/90 via-white/30 to-white/5" />
+                <p className="relative text-sm font-semibold text-foreground/65">{path.number}</p>
+                <div className="relative mt-20 flex items-end justify-between gap-3">
                   <div>
                     <h3 className="text-2xl font-semibold tracking-[-0.045em]">{path.title}</h3>
                     <p className="mt-3 max-w-xs text-sm leading-6 text-foreground/70">{path.text}</p>
@@ -193,11 +214,22 @@ export function HomePage() {
         </section>
 
         <section className="mx-auto max-w-7xl px-5 pb-20 sm:px-8 sm:pb-28">
-          <div className="rounded-[2rem] bg-[#d7f4e8] px-6 py-10 sm:px-12 sm:py-14">
+          <div className="relative overflow-hidden rounded-[2rem] bg-[#d7f4e8] px-6 py-10 sm:px-12 sm:py-14">
+            <OptimizedImage
+              alt="Bitcoin zajednica"
+              className="absolute inset-0 h-full w-full object-cover opacity-20"
+              pictureClassName="absolute inset-0 block h-full w-full"
+              src="/images/landing/stock image btc 9.jpeg"
+              width={828}
+              height={828}
+            />
+            <div className="absolute inset-0 bg-[#d7f4e8]/70" />
+            <div className="relative">
             <MessageCircle className="size-7 text-primary-strong" />
             <h2 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.02] tracking-[-0.06em] sm:text-6xl">Bitcoin je globalan. Zajednica počinje lokalno.</h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-foreground/70 sm:text-lg">Pronađi ljude iz regije, postavi pitanje i pomozi da se sljedeća dobra ideja dogodi baš u tvom gradu.</p>
             <div className="mt-8"><ActionButton href={COMMUNITY_URL} icon={<ArrowUpRight className="size-4" />} primary external>Pridruži se zajednici</ActionButton></div>
+            </div>
           </div>
         </section>
       </main>
