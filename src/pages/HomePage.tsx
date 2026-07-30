@@ -4,7 +4,6 @@ import {
   CalendarDays,
   MapPin,
   MessageCircle,
-  Play,
   Sparkles,
 } from "lucide-react"
 
@@ -12,16 +11,15 @@ import { ActionButton } from "@/components/ActionButton"
 import { Layout } from "@/components/Layout"
 import { OptimizedImage } from "@/components/OptimizedImage"
 import { events } from "@/data/events"
-import { featuredArticles } from "@/data/featuredArticles"
+import { episodes } from "@/data/episodes"
 import {
-  ARTICLES_URL,
   BEGINNERS_URL,
   CITIES_URL,
   COMMUNITY_URL,
   EVENTS_URL,
   LIVESTREAM_URL,
 } from "@/data/site"
-import { articleHref, eventHref, formatEventDate } from "@/lib/content"
+import { episodeHref, eventHref, formatEpisodeDate, formatEventDate } from "@/lib/content"
 import { usePageMeta } from "@/lib/usePageMeta"
 
 const paths = [
@@ -34,15 +32,15 @@ const paths = [
   },
   {
     number: "02",
-    title: "Dođi među ljude",
-    text: "Meetupi, razgovori i lokalne inicijative diljem regije.",
-    href: EVENTS_URL,
+    title: "Gledaj uživo",
+    text: "Razgovori, pitanja i lokalna perspektiva — svake nedjelje.",
+    href: LIVESTREAM_URL,
     tone: "bg-[#dce9ff]",
   },
   {
     number: "03",
-    title: "Pridonesi signalu",
-    text: "Podijeli ideju, pokreni susret ili napravi nešto korisno.",
+    title: "Pokreni nešto lokalno",
+    text: "Predloži događaj, pronađi ljude ili započni dobru inicijativu.",
     href: COMMUNITY_URL,
     tone: "bg-[#ffd9c1]",
     external: true,
@@ -61,6 +59,7 @@ export function HomePage() {
       (left, right) =>
         new Date(left.start).getTime() - new Date(right.start).getTime(),
     )[0]
+  const latestEpisode = episodes[0]
 
   return (
     <Layout>
@@ -89,7 +88,7 @@ export function HomePage() {
                   icon={<CalendarDays className="size-4" />}
                   primary
                 >
-                  Pronađi događaj
+                  {upcomingEvent ? "Rezerviraj mjesto" : "Pronađi događaj"}
                 </ActionButton>
                 <ActionButton href={BEGINNERS_URL} icon={<ArrowDownRight className="size-4" />}>
                   Počni učiti
@@ -113,6 +112,14 @@ export function HomePage() {
                 >
                   Uđi u Telegram <ArrowUpRight className="size-4" />
                 </a>
+                {latestEpisode?.publishedAt ? (
+                  <a
+                    className="mt-5 block border-t border-white/15 pt-4 text-xs leading-5 text-white/65 hover:text-white"
+                    href={episodeHref(latestEpisode.slug)}
+                  >
+                    Novo uživo · {formatEpisodeDate(latestEpisode.publishedAt)}
+                  </a>
+                ) : null}
               </div>
               <div className="absolute -bottom-16 -right-12 size-48 rounded-full border-[22px] border-[#f7931a]" />
               <div className="absolute bottom-8 right-8 flex size-14 items-center justify-center rounded-full bg-[#ffd35f] text-2xl text-[#242022]">
@@ -182,30 +189,6 @@ export function HomePage() {
                 </div>
               </a>
             ) : null}
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24">
-          <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr]">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-strong">Čitaj i slušaj</p>
-              <h2 className="mt-4 text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">Sadržaj za dublje razumijevanje.</h2>
-              <p className="mt-5 max-w-md text-base leading-7 text-muted-foreground">Kreni svojim tempom — od prvih pitanja o novcu do praktične sigurnosti i lokalnih razgovora.</p>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <ActionButton href={ARTICLES_URL} icon={<ArrowUpRight className="size-4" />} primary>Čitaj članke</ActionButton>
-                <ActionButton href={LIVESTREAM_URL} icon={<Play className="size-4" />}>Livestream</ActionButton>
-              </div>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {featuredArticles.slice(0, 2).map((article, index) => (
-                <a className={`rounded-[1.5rem] p-6 ${index === 0 ? "bg-[#dce9ff]" : "bg-[#ffd9c1]"}`} href={articleHref(article.slug)} key={article.slug}>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-foreground/55">Preporučeno čitanje</p>
-                  <h3 className="mt-12 text-2xl font-semibold leading-tight tracking-[-0.045em]">{article.title}</h3>
-                  <p className="mt-3 text-sm leading-6 text-foreground/70">{article.description}</p>
-                  <span className="mt-7 inline-flex items-center gap-2 text-sm font-semibold">Otvori tekst <ArrowUpRight className="size-4" /></span>
-                </a>
-              ))}
-            </div>
           </div>
         </section>
 
