@@ -74,6 +74,12 @@ const communityPhotos = [
   "/images/events/rab meetup 2022.jpeg",
 ]
 
+function youtubeThumbnail(url: string) {
+  const videoId = url.match(/(?:v=|youtu\.be\/|live\/)([^?&/]+)/)?.[1]
+
+  return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : undefined
+}
+
 export function HomePage() {
   usePageMeta(
     "DvadesetJedan | Bitcoin zajednica za Balkan",
@@ -87,6 +93,7 @@ export function HomePage() {
         new Date(left.start).getTime() - new Date(right.start).getTime(),
     )[0]
   const latestEpisode = episodes[0]
+  const featuredEpisodes = episodes.slice(0, 2)
   const memberProjects = publishedCommunityProjects
     .filter((project) => project.featured && project.status !== "archive")
     .slice(0, 3)
@@ -258,6 +265,35 @@ export function HomePage() {
                 </a>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24">
+          <div className="flex flex-wrap items-end justify-between gap-5">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-strong">DvadesetJedan uživo</p>
+              <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">Razgovori koje možeš gledati i kasnije.</h2>
+            </div>
+            <a className="inline-flex items-center gap-2 text-sm font-semibold text-primary-strong hover:text-foreground" href={ARTICLES_URL}>
+              Čitaj materijale <ArrowUpRight className="size-4" />
+            </a>
+          </div>
+          <div className="mt-9 grid gap-4 lg:grid-cols-[1.35fr_0.65fr]">
+            {featuredEpisodes.map((episode, index) => (
+              <a className={`group relative overflow-hidden rounded-[1.75rem] bg-[#242022] text-[#fff8ef] ${index === 0 ? "min-h-[27rem]" : "min-h-[21rem]"}`} href={episode.youtubeUrl} key={episode.slug} rel="noopener noreferrer" target="_blank">
+                {youtubeThumbnail(episode.youtubeUrl) ? (
+                  <OptimizedImage alt="Thumbnail DvadesetJedan livestreama" className="absolute inset-0 h-full w-full object-cover opacity-55 transition-transform duration-500 group-hover:scale-105" pictureClassName="absolute inset-0 block h-full w-full" src={youtubeThumbnail(episode.youtubeUrl)} width={480} height={360} />
+                ) : null}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#242022] via-[#242022]/75 to-[#242022]/10" />
+                <div className="relative flex h-full flex-col justify-end p-6 sm:p-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#a9ecd5]">{index === 0 ? "Najnovija epizoda" : "Prethodna epizoda"}</p>
+                  {episode.publishedAt ? <p className="mt-3 text-sm text-white/70">{formatEpisodeDate(episode.publishedAt)}</p> : null}
+                  <h3 className="mt-3 max-w-2xl text-2xl font-semibold leading-tight tracking-[-0.045em] sm:text-3xl">{episode.title}</h3>
+                  <p className="mt-3 max-w-xl text-sm leading-6 text-white/75">{episode.summary}</p>
+                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#ffd35f]">Gledaj epizodu <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-1" /></span>
+                </div>
+              </a>
+            ))}
           </div>
         </section>
 
