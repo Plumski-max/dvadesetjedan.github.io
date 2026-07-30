@@ -12,43 +12,73 @@ import { Layout } from "@/components/Layout"
 import { OptimizedImage } from "@/components/OptimizedImage"
 import { events } from "@/data/events"
 import { episodes } from "@/data/episodes"
+import { publishedCommunityProjects } from "@/data/communityProjects"
 import {
+  ARTICLES_URL,
   BEGINNERS_URL,
   CITIES_URL,
   COMMUNITY_URL,
+  COMMUNITY_PROJECTS_URL,
   EVENTS_URL,
   LIVESTREAM_URL,
 } from "@/data/site"
-import { episodeHref, eventHref, formatEpisodeDate, formatEventDate } from "@/lib/content"
+import {
+  communityProjectHref,
+  episodeHref,
+  eventHref,
+  formatEpisodeDate,
+  formatEventDate,
+} from "@/lib/content"
 import { usePageMeta } from "@/lib/usePageMeta"
 
 const paths = [
   {
     number: "01",
-    title: "Upoznaj Bitcoin",
-    text: "Mirni početak bez žargona, hypea i nepotrebnog rizika.",
-    href: BEGINNERS_URL,
+    title: "Čitaj materijale",
+    text: "Vodiči, članci i objašnjenja za mirno učenje bez žargona.",
+    href: ARTICLES_URL,
     tone: "bg-[#d7f4e8]",
-    image: "/images/landing/stock image btc 3.jpeg",
+    image: "/images/landing/stock image btc 7.jpeg",
   },
   {
     number: "02",
-    title: "Gledaj uživo",
+    title: "Gledaj live podcaste",
     text: "Razgovori, pitanja i lokalna perspektiva — svake nedjelje.",
     href: LIVESTREAM_URL,
     tone: "bg-[#dce9ff]",
-    image: "/images/landing/stock image btc 6.jpeg",
+    image: "/images/landing/stock image btc 3.jpeg",
   },
   {
     number: "03",
-    title: "Pokreni nešto lokalno",
-    text: "Predloži događaj, pronađi ljude ili započni dobru inicijativu.",
+    title: "Pridruži se Telegramu",
+    text: "Postavi pitanje, pronađi ljude i uključi se u razgovor iz regije.",
     href: COMMUNITY_URL,
     tone: "bg-[#ffd9c1]",
     external: true,
+    image: "/images/landing/stock image btc 6.jpeg",
+  },
+  {
+    number: "04",
+    title: "Dođi na meetup",
+    text: "Upoznaj zajednicu uživo na sljedećem lokalnom okupljanju.",
+    href: EVENTS_URL,
+    tone: "bg-[#ffe7a8]",
     image: "/images/landing/stock image btc 8.jpeg",
   },
 ]
+
+const communityPhotos = [
+  "/images/events/bridging bitcoin belgrade october 202441.34.jpeg",
+  "/images/events/revolution rocks belgrade june 2026 9.jpeg",
+  "/images/events/kraljevica meetup 2024.jpeg",
+  "/images/events/rab meetup 2022.jpeg",
+]
+
+function youtubeThumbnail(url: string) {
+  const videoId = url.match(/(?:v=|youtu\.be\/|live\/)([^?&/]+)/)?.[1]
+
+  return videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : undefined
+}
 
 export function HomePage() {
   usePageMeta(
@@ -63,6 +93,10 @@ export function HomePage() {
         new Date(left.start).getTime() - new Date(right.start).getTime(),
     )[0]
   const latestEpisode = episodes[0]
+  const featuredEpisodes = episodes.slice(0, 2)
+  const memberProjects = publishedCommunityProjects
+    .filter((project) => project.featured && project.status !== "archive")
+    .slice(0, 3)
 
   return (
     <Layout>
@@ -109,6 +143,15 @@ export function HomePage() {
                 height={1176}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#242022] via-[#242022]/80 to-[#242022]/20" />
+              <OptimizedImage
+                alt=""
+                aria-hidden="true"
+                className="absolute -right-24 bottom-28 w-[34rem] max-w-none opacity-25 [mask-image:linear-gradient(90deg,transparent,black_22%,black_72%,transparent)] sm:-right-16"
+                pictureClassName="pointer-events-none absolute"
+                src="/images/dvadesetjedan-logo-dark.png"
+                width={840}
+                height={72}
+              />
               <p className="relative text-xs font-semibold uppercase tracking-[0.18em] text-[#ffd35f]">
                 Zajednica je uživo
               </p>
@@ -154,11 +197,11 @@ export function HomePage() {
         <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24">
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-strong">Tvoj sljedeći korak</p>
-              <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">Uđi kroz vrata koja ti najviše odgovaraju.</h2>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-strong">Počni ovdje</p>
+              <h2 className="mt-3 max-w-2xl text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">Odaberi svoj prvi korak u Bitcoinu.</h2>
             </div>
           </div>
-          <div className="mt-9 grid gap-4 md:grid-cols-3">
+          <div className="mt-9 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {paths.map((path) => (
               <a
                 className={`group relative min-h-72 overflow-hidden rounded-[1.75rem] p-6 transition-transform duration-200 hover:-translate-y-1 ${path.tone}`}
@@ -186,6 +229,82 @@ export function HomePage() {
                 </div>
               </a>
             ))}
+          </div>
+        </section>
+
+        <section className="border-y border-foreground/10 bg-card/60 py-16 sm:py-24">
+          <div className="mx-auto max-w-7xl px-5 sm:px-8">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-strong">Zajednica u pokretu</p>
+              <h2 className="mt-3 text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">Fotografije s prošlih događaja.</h2>
+            </div>
+            <div className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {communityPhotos.map((photo, index) => (
+                <div className={`overflow-hidden rounded-[1.5rem] ${index % 2 === 0 ? "sm:translate-y-8" : ""}`} key={photo}>
+                  <OptimizedImage alt="DvadesetJedan zajednica na događaju" className="aspect-[4/5] w-full object-cover" pictureClassName="block" src={photo} width={1170} height={1176} />
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-20 flex flex-wrap items-end justify-between gap-5">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-strong">Iz zajednice</p>
+                <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">Što rade naši članovi.</h2>
+              </div>
+              <a className="inline-flex items-center gap-2 text-sm font-semibold text-primary-strong hover:text-foreground" href={COMMUNITY_PROJECTS_URL}>
+                Svi projekti <ArrowUpRight className="size-4" />
+              </a>
+            </div>
+            <div className="mt-9 grid gap-4 md:grid-cols-3">
+              {memberProjects.map((project) => (
+                <a className="group rounded-[1.5rem] border border-border/80 bg-background p-6 transition-transform hover:-translate-y-1" href={communityProjectHref(project.slug)} key={project.slug}>
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary-strong">{project.displayName}</p>
+                  <h3 className="mt-4 text-2xl font-semibold tracking-[-0.04em]">{project.title}</h3>
+                  <p className="mt-3 text-sm leading-6 text-muted-foreground">{project.summary}</p>
+                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold">Pogledaj projekt <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-1" /></span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24">
+          <div className="flex flex-wrap items-end justify-between gap-5">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-primary-strong">DvadesetJedan uživo</p>
+              <h2 className="mt-3 max-w-3xl text-4xl font-semibold tracking-[-0.055em] sm:text-5xl">Razgovori koje možeš gledati i kasnije.</h2>
+            </div>
+            <a className="inline-flex items-center gap-2 text-sm font-semibold text-primary-strong hover:text-foreground" href={ARTICLES_URL}>
+              Čitaj materijale <ArrowUpRight className="size-4" />
+            </a>
+          </div>
+          <div className="mt-9 grid gap-4 lg:grid-cols-[1.35fr_0.65fr]">
+            {featuredEpisodes.map((episode, index) => (
+              <a className={`group relative overflow-hidden rounded-[1.75rem] bg-[#242022] text-[#fff8ef] ${index === 0 ? "min-h-[27rem]" : "min-h-[21rem]"}`} href={episode.youtubeUrl} key={episode.slug} rel="noopener noreferrer" target="_blank">
+                {youtubeThumbnail(episode.youtubeUrl) ? (
+                  <OptimizedImage alt="Thumbnail DvadesetJedan livestreama" className="absolute inset-0 h-full w-full object-cover opacity-55 transition-transform duration-500 group-hover:scale-105" pictureClassName="absolute inset-0 block h-full w-full" src={youtubeThumbnail(episode.youtubeUrl)} width={480} height={360} />
+                ) : null}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#242022] via-[#242022]/75 to-[#242022]/10" />
+                <div className="relative flex h-full flex-col justify-end p-6 sm:p-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#a9ecd5]">{index === 0 ? "Najnovija epizoda" : "Prethodna epizoda"}</p>
+                  {episode.publishedAt ? <p className="mt-3 text-sm text-white/70">{formatEpisodeDate(episode.publishedAt)}</p> : null}
+                  <h3 className="mt-3 max-w-2xl text-2xl font-semibold leading-tight tracking-[-0.045em] sm:text-3xl">{episode.title}</h3>
+                  <p className="mt-3 max-w-xl text-sm leading-6 text-white/75">{episode.summary}</p>
+                  <span className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#ffd35f]">Gledaj epizodu <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-1" /></span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-7xl px-5 pb-16 sm:px-8 sm:pb-24">
+          <div className="flex flex-col gap-6 rounded-[1.75rem] border border-border/80 bg-secondary/55 px-6 py-8 sm:flex-row sm:items-center sm:justify-between sm:px-10">
+            <div className="max-w-2xl">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-primary-strong"><MessageCircle className="size-4" /> Razgovor se nastavlja</p>
+              <h2 className="mt-3 text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">Pridruži se na Telegramu.</h2>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">Postavi pitanje, prati najave i upoznaj ljude iz cijele regije. Početnici su uvijek dobrodošli.</p>
+            </div>
+            <ActionButton href={COMMUNITY_URL} icon={<ArrowUpRight className="size-4" />} primary external>Pridruži se na Telegramu</ActionButton>
           </div>
         </section>
 
