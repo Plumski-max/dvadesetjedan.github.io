@@ -1,4 +1,5 @@
 import type { EventEntry } from "@/data/events"
+import { useState } from "react"
 
 import { ArrowUpRight, Send } from "lucide-react"
 
@@ -7,7 +8,7 @@ import { BackLink } from "@/components/BackLink"
 import { EventCard } from "@/components/EventCard"
 import { Layout } from "@/components/Layout"
 import { eventMeta } from "@/data/eventMeta"
-import { CONTRIBUTE_URL } from "@/data/site"
+import { CONTRIBUTE_URL, GITHUB_URL } from "@/data/site"
 import { communityHref } from "@/lib/content"
 import { usePageMeta } from "@/lib/usePageMeta"
 
@@ -31,6 +32,8 @@ function eventCountLabel(count: number) {
 function cityAnchorId(city: string) {
   return `grad-${city.toLowerCase().replace(/\s+/g, "-")}`
 }
+
+const EVENT_PROPOSAL_URL = `${GITHUB_URL}/issues/new?template=event_proposal.yml`
 
 export function EventsPage({ events }: { events: EventEntry[] }) {
   usePageMeta(
@@ -65,6 +68,12 @@ export function EventsPage({ events }: { events: EventEntry[] }) {
     }
   }
   const cityGroups = [...cityAnchorOwners.keys()].sort()
+  const [activeCity, setActiveCity] = useState<string | null>(null)
+  const filterByActiveCity = (event: EventEntry) =>
+    activeCity === null || event.city === activeCity
+  const visibleUpcomingEvents = upcomingEvents.filter(filterByActiveCity)
+  const visiblePastEvents = pastEvents.filter(filterByActiveCity)
+  const visibleCancelledEvents = cancelledEvents.filter(filterByActiveCity)
 
   return (
     <Layout>
@@ -114,16 +123,39 @@ export function EventsPage({ events }: { events: EventEntry[] }) {
               </span>
             ) : null}
           </div>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {cityGroups.map((city) => (
-              <a
-                className="inline-flex min-h-11 items-center rounded-full border border-border/80 px-3 py-1 text-xs font-medium text-foreground hover:border-primary/40"
-                href={`#${cityAnchorId(city)}`}
-                key={city}
+          <div className="mt-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+              Filtriraj po gradu
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                aria-pressed={activeCity === null}
+                className={`inline-flex min-h-10 items-center rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${
+                  activeCity === null
+                    ? "border-primary bg-primary text-primary-foreground"
+                    : "border-border/80 text-foreground hover:border-primary/40"
+                }`}
+                onClick={() => setActiveCity(null)}
+                type="button"
               >
-                {city}
-              </a>
-            ))}
+                Svi gradovi
+              </button>
+              {cityGroups.map((city) => (
+                <button
+                  aria-pressed={activeCity === city}
+                  className={`inline-flex min-h-10 items-center rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${
+                    activeCity === city
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border/80 text-foreground hover:border-primary/40"
+                  }`}
+                  key={city}
+                  onClick={() => setActiveCity(city)}
+                  type="button"
+                >
+                  {city}
+                </button>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -133,11 +165,11 @@ export function EventsPage({ events }: { events: EventEntry[] }) {
               Nadolazeći događaji
             </h2>
             <p className="text-sm text-muted-foreground">
-              {eventCountLabel(upcomingEvents.length)}
+              {eventCountLabel(visibleUpcomingEvents.length)}
             </p>
           </div>
 
-          {upcomingEvents.length === 0 ? (
+          {visibleUpcomingEvents.length === 0 ? (
             <div className="mt-6 rounded-[1.8rem] border border-dashed border-border/80 bg-card/60 px-6 py-10">
               <p className="text-base leading-8 text-foreground">
                 Trenutno nema javno najavljenih događaja.
@@ -156,7 +188,7 @@ export function EventsPage({ events }: { events: EventEntry[] }) {
                   Uđi u Telegram grupu
                 </ActionButton>
                 <ActionButton
-                  href={communityHref()}
+                  href={EVENT_PROPOSAL_URL}
                   icon={<ArrowUpRight className="size-4" />}
                   external
                 >
@@ -166,7 +198,7 @@ export function EventsPage({ events }: { events: EventEntry[] }) {
             </div>
           ) : (
             <div className="mt-6 grid gap-5 md:grid-cols-2">
-              {upcomingEvents.map((event) => (
+              {visibleUpcomingEvents.map((event) => (
                 <div
                   className="scroll-mt-32"
                   id={
@@ -183,18 +215,18 @@ export function EventsPage({ events }: { events: EventEntry[] }) {
           )}
         </section>
 
-        {cancelledEvents.length ? (
+        {visibleCancelledEvents.length ? (
           <section className="mt-14">
             <div className="flex items-end justify-between gap-4">
               <h2 className="text-4xl font-semibold tracking-[-0.04em] text-foreground">
                 Otkazani događaji
               </h2>
               <p className="text-sm text-muted-foreground">
-                {eventCountLabel(cancelledEvents.length)}
+                {eventCountLabel(visibleCancelledEvents.length)}
               </p>
             </div>
             <div className="mt-6 grid gap-5 md:grid-cols-2">
-              {cancelledEvents.map((event) => (
+              {visibleCancelledEvents.map((event) => (
                 <div
                   className="scroll-mt-32"
                   id={
@@ -231,7 +263,7 @@ export function EventsPage({ events }: { events: EventEntry[] }) {
           </ol>
           <div className="mt-6 flex flex-wrap gap-3">
             <ActionButton
-              href={communityHref()}
+              href={EVENT_PROPOSAL_URL}
               icon={<Send className="size-4" />}
               external
               primary
@@ -253,13 +285,13 @@ export function EventsPage({ events }: { events: EventEntry[] }) {
               Arhiva druženja
             </h2>
             <p className="text-sm text-muted-foreground">
-              {eventCountLabel(pastEvents.length)}
+              {eventCountLabel(visiblePastEvents.length)}
             </p>
           </div>
 
-          {pastEvents.length > 0 ? (
+          {visiblePastEvents.length > 0 ? (
             <div className="mt-6 grid gap-5 md:grid-cols-2">
-              {pastEvents.map((event) => (
+              {visiblePastEvents.map((event) => (
                 <div
                   className="scroll-mt-32"
                   id={
